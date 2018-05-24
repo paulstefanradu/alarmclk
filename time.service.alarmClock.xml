@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE node PUBLIC
+    "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+    "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd" >
+<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name="com.time.service.alarmClock">
+      <method name="checkDebugVariables">
+      <arg name="var11" direction="out" type="i">
+        <doc:doc><doc:summary>alStatus: </doc:summary></doc:doc>
+      </arg>
+      <arg name="var22" direction="out" type="i">
+        <doc:doc><doc:summary>alStatus: </doc:summary></doc:doc>
+      </arg>
+      <arg name="var33" direction="out" type="i">
+        <doc:doc><doc:summary>alStatus: </doc:summary></doc:doc>
+      </arg>
+        <doc:doc>
+          <doc:description>
+            <doc:para>
+              Updates the time.
+            </doc:para>
+          </doc:description>
+        </doc:doc>
+      </method>
+    <method name="setTime">
+      <arg name="hour" direction="in" type="y">
+        <doc:doc><doc:summary>hour: </doc:summary></doc:doc>
+      </arg>
+      <arg name="minute" direction="in" type="y">
+        <doc:doc><doc:summary>minute: </doc:summary></doc:doc>
+      </arg>
+      <arg name="second" direction="in" type="y">
+        <doc:doc><doc:summary>second: </doc:summary></doc:doc>
+      </arg>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Updates the time.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+    <method name="setAlarmTime">
+      <arg name="hour" direction="in" type="y">
+        <doc:doc><doc:summary>hour: </doc:summary></doc:doc>
+      </arg>
+      <arg name="minute" direction="in" type="y">
+        <doc:doc><doc:summary>minute: </doc:summary></doc:doc>
+      </arg>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Sets the alarm time.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+    <method name="getAlarmStatus">
+      <arg name="alStatus" direction="out" type="b">
+        <doc:doc><doc:summary>alStatus: </doc:summary></doc:doc>
+      </arg>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Returns the alarm status(ON/OFF).
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+    <method name="setAlarmStatus">
+      <arg name="alStatus" direction="in" type="b">
+        <doc:doc><doc:summary>alStatus: </doc:summary></doc:doc>
+      </arg>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Activates or deactivates the alarm.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+    <signal name="ringAlarm">
+      <arg name="isAlarmRinging" type="b" />
+    </signal>
+  </interface>
+</node>
