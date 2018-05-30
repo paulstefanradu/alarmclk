@@ -35,6 +35,7 @@ gboolean
 ACLK_RingAlarm(alarmClockAlarmClock *ifc){
     printf("\ncallbackcalled\n");
     timerID=0;
+    ACLK_RuntimeData.alarmStatus = FALSE;
     alarm_clock_alarm_clock_emit_ring_alarm
             (ifc,
              TRUE);
