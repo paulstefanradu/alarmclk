@@ -8,6 +8,7 @@ gboolean ACLK_setAlarmtime(alarmClockAlarmClock *ifc,GDBusMethodInvocation *inv,
 gboolean ACLK_getAlarmStatus(void);
 gboolean ACLK_setAlarmStatus(alarmClockAlarmClock *ifc,GDBusMethodInvocation *inv,guchar status);
 gboolean ACLK_RingAlarm(alarmClockAlarmClock *ifc);
+gboolean ACLK_doBackgroundWork(alarmClockAlarmClock *ifc);
 
 /*end of function prototypes*/
 

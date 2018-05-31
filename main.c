@@ -20,25 +20,48 @@ typedef struct _ACLK_time_dataType{
 typedef struct _ACLK_RuntimeData_dataType{
     ACLK_time_dataType ACLK_time;
     unsigned char alarmStatus;
+
 }ACLK_RuntimeData_dataType;
 
 ACLK_RuntimeData_dataType ACLK_RuntimeData;
 
 guint timerID=0;
-
+GAsyncQueue *ACLK_AsyncQueue;
+GThread *ACLK_backgroundWorker;
+gboolean ACLK_alarmIsRinging=FALSE;
 
 /*end of private data*/
 
 
 /*functions definitions*/
 gboolean
+ACLK_doBackgroundWork(alarmClockAlarmClock *ifc){
+    gboolean timeToRingTheAlarm=NULL;
+    while(TRUE){
+        timeToRingTheAlarm = g_async_queue_try_pop(ACLK_AsyncQueue);
+        if(timeToRingTheAlarm == NULL){
+            ;
+        }
+        else{
+            printf("\ncallbackcalled\n");
+            ACLK_alarmIsRinging = FALSE;
+            timerID=0;
+            ACLK_RuntimeData.alarmStatus = FALSE;
+            alarm_clock_alarm_clock_emit_ring_alarm
+                    (ifc,
+                     TRUE);
+        }
+    }
+    return FALSE;
+}
+
+gboolean
 ACLK_RingAlarm(alarmClockAlarmClock *ifc){
-    printf("\ncallbackcalled\n");
-    timerID=0;
-    ACLK_RuntimeData.alarmStatus = FALSE;
-    alarm_clock_alarm_clock_emit_ring_alarm
-            (ifc,
-             TRUE);
+
+    ACLK_alarmIsRinging = TRUE;
+    g_async_queue_push(ACLK_AsyncQueue,&ACLK_alarmIsRinging);
+
+
     return FALSE;
 }
 gboolean
@@ -88,7 +111,7 @@ gboolean
 ACLK_setAlarmStatus(alarmClockAlarmClock *ifc,GDBusMethodInvocation *inv,guchar status){
     ACLK_RuntimeData.alarmStatus = status;
     if(status == 0){
-        if(timerID != 0){
+        if(timerID != 0){GAsyncQueue *ACLK_AsyncQueue;
             g_source_remove(timerID); //cancel the running timer
             timerID=0;
         }else; //do nothing
@@ -138,6 +161,10 @@ on_bus_acquired (GDBusConnection *connection,
                  gpointer         user_data)
 {
   /* This is where we'd export some objects on the bus */
+
+
+
+
     alarmClockObjectSkeleton *object; // from stub
     GDBusObjectManagerServer *manager = NULL;
 
@@ -161,6 +188,11 @@ on_bus_acquired (GDBusConnection *connection,
 
     g_dbus_object_manager_server_set_connection(manager, connection);
     TIM_initTimerModule();
+    ACLK_AsyncQueue = g_async_queue_new();
+    ACLK_backgroundWorker = g_thread_new("backgroundworker",ACLK_doBackgroundWork,alclkAlarm);
+
+
+
 
     g_print("Bus successfully acquired: %s\n", bname);
 }

@@ -14,9 +14,7 @@ INCLUDES=-I/usr/include/glib-2.0 \
 LIBS=`pkg-config --libs --cflags dbus-1 glib-2.0 gio-2.0 gthread-2.0 gio-unix-2.0 gobject-2.0`
 
 all:$1
-build: output
-	mv *o build/
-output: main.o alarmClockStubs.o timer.o
+build: main.o alarmClockStubs.o timer.o
 	$(CC) main.o alarmClockStubs.o timer.o -o startAlarmClock $(LIBS)
 main.o: main.c alarmClockStubs.c
 	$(CC) $(CFLAGS) main.c -o $@ $(INCLUDES)
